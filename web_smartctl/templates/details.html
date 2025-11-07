@@ -1,0 +1,12 @@
+$def with (tbl_info, tbl_brief, tbl_detail, computer, device_name, generation, datetime_info, datetime_data)
+
+<h2>$computer &rarr; $device_name ($generation)</h2>
+
+<h3>smartctl info ($datetime_info)</h3>
+$:tbl_info
+
+<h3>smartctl brief ($datetime_data)</h3>
+$:tbl_brief
+
+<h3>smartctl details ($datetime_data)</h3>
+$:tbl_detail

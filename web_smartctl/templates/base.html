@@ -1,0 +1,210 @@
+$def with (page)
+
+<html>
+<head>
+    <title>smartctlDB</title>
+
+<style>
+	
+body {
+    margin-left: 1em;
+    margin-right: 1em;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+form {
+    margin-left: 0.5em;
+}
+	
+h1 { 
+    color: black; 
+}
+ 
+h1, h2, h3 { 
+    background-color: #ccc;
+    border-radius: .5em; 
+    padding: 2px 5px 2px 5px;
+}
+
+.search_form {
+    background-color: #ccc;
+    border-radius: .5em; 
+    padding: 12px 0px 1px 0px;
+}
+
+
+.login_form {
+    background-color: #ccc;
+    border-radius: .5em; 
+    padding: 12px 0px 1px 0px;
+}
+
+
+.search_result {
+	font-size: 12px;
+	padding-top: 5px;
+	margin-left: 5px;
+}
+
+
+ul#navigation {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+
+ul#navigation li {
+	padding: 0px;
+	margin: 5px;
+	display: inline;
+}
+
+ul#navigation li a:link {
+	border: 1px solid #666;
+	background-color: #ccc;
+	border-radius: 1em;
+	padding: 2px 5px 2px 5px;
+	font-size: 12px;
+	color: #000;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+ul#navigation li a:hover {
+	border: 1px solid #666;
+	background-color: #666;
+	padding: 2px 5px 2px 5px;
+	color: #fff;
+}
+
+
+table,
+th,
+td {
+	border-collapse: collapse;
+	padding: 0.3em 0.5em;
+}
+
+
+th,
+caption {
+	background-color: #666;
+	color: #fff;
+	border: thin solid #666;
+}
+
+td {
+	background-image: linear-gradient(#f9f9f9, #e3e3e3);
+}
+
+tfoot {
+	border-bottom: thin solid #666;
+}
+
+caption {
+	font-size: 1em;
+	border-radius: 0.5em 0.5em 0 0;
+	padding: 0.5em 0 0 0
+}
+
+footer {
+    font-size: 12px;	
+}
+
+#myBtn {
+  display: none; /* Standardmäßig ausgeblendet */
+  position: fixed; /* Fixiert am Bildschirmrand */
+  bottom: 20px; /* 20 Pixel vom unteren Rand entfernt */
+  right: 30px; /* 30 Pixel vom rechten Rand entfernt */
+  z-index: 99; /* Stellt sicher, dass der Button über anderen Elementen liegt */
+  border: none; /* Kein Rand */
+  outline: none; /* Kein ausgegrauter Kasten beim Klicken */
+  background-color: red; /* Rote Hintergrundfarbe */
+  color: white; /* Weiße Schriftfarbe */
+  cursor: pointer; /* Zeigt einen Mauszeiger an */
+  padding: 5px; /* Innenabstand */
+  border-radius: 1em; /* Abgerundete Ecken */
+  font-size: 12px; /* Schriftgröße */
+}
+
+#myBtn:hover {
+  background-color: #555; /* Dunkelgrau beim Darüberfahren mit der Maus */
+}
+
+code {
+  font-family: monospace;
+  color: black;
+  padding: 2px;
+  font-size: 120%;
+  font-weight: bold;
+  display: block;
+  white-space: pre;
+}
+
+a:link {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: white;
+  background-color: #555;
+  text-decoration: none;
+}
+
+a:active {
+  color: yellow;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+</style>
+
+<script>
+// Wenn der Benutzer 20 Pixel nach unten scrollt, zeige den Button an.
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("myBtn").style.display = "block";
+  } else {
+    document.getElementById("myBtn").style.display = "none";
+  }
+}
+
+// Wenn der Benutzer auf den Button klickt, scrolle zum oberen Seitenende.
+function topFunction() {
+  document.body.scrollTop = 0; // Für Safari
+  document.documentElement.scrollTop = 0; // Für Chrome, Firefox, IE und Opera
+}
+</script>
+
+</head>
+<body>
+<h1>smartctlDB</h1>
+
+<p>
+<ul id="navigation">
+		<li><a href="/">overview</a></li>
+		<li><a href="javascript:history.back()">back</a></li>
+</ul>
+</p>
+
+
+$:page
+
+<button onclick="topFunction()" id="myBtn" title="Nach oben">Nach oben</button>
+
+<footer>
+    <hr>
+    Uwe Berger; 2025
+</footer>
+</body>
+</html>
