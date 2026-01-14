@@ -12,6 +12,7 @@
 # *********************************************************************************************
 
 import json
+import model
 
 # *******************************************************
 # Formatdefinitionen für smartctl-Tabelle (xxx_smart_attributes)
@@ -36,7 +37,7 @@ tab_mask_def = {
 }
 
 
-# **********************************++++++++******************************
+# ***********************************************************************
 def get_nested_value(data, path, sep='.', default=None):
     for key in path.split(sep):
         if isinstance(data, dict) and key in data:
@@ -50,8 +51,12 @@ def json_loads(json_str):
     return(json.loads(json_str))
 
 # ***********************************************************************************
-def get_value_as_link (json_path, value, link_params):
-    return f'<a href="/graph/?json_path={json_path}&{link_params}">{value}</a>'
+def get_value_as_link (json_path, value, link_params, value_name):
+    if len(value_name):
+        description = f"&description={value_name}"
+    else:
+        description = ""
+    return f'<a href="/graph/?json_path={json_path}&{link_params}{description}">{value}</a>'
 
 # ***********************************************************************************
 def get_json_path (json_path, json_key):
@@ -79,29 +84,36 @@ def json_to_ascii(data, space_len, r, th, json_path, json_key, link_params):
         spaces=" "*space_len
 
         if isinstance(value, dict):
-            # weiter rekursiv "abtauschen", da noch ein dict
+            # weiter rekursiv "abtauchen", da noch ein dict
             r = F"{r}{key}:\n"
             r = json_to_ascii(value, space_len+int(len(key)), r, th, json_path, key, link_params)
         elif isinstance(value, list):
             # ab hier wird eine Liste (auch mit den evtl. weiteren Strukturen) zeilenweise als Tabelle ausgegeben
             r = f"{r}{spaces}{key}:\n"
+            # ...fuer den Fall, dass zwischendurch noch etwas anderes als eine Liste kommt, alten Pfad merken
+            old_json_path = json_path
             json_path = get_json_path(json_path, key)
             spaces=" " * (len(spaces) + int(len(key)))
             for i, item in enumerate(value):
                 r = json_to_ascii_vertical(item, r, th, space_len + int(len(key)), json_path, i, link_params)
                 th = False
                 r = f"{r}\n"
+            # ...Pfad wieder zuruecksetzen
+            json_path = old_json_path
         else:
             # einzelner Wert, also entsprechend ausgeben
-            dyn_spaces = "."*(max_str_len - len(key) - space_len)
+            dyn_spaces = " "*(max_str_len - len(key) - space_len)
+            # evtl. Hover-Text
+            key_hover=model.get_hover(key)
             if isinstance(value, str):
                 # nur den Wert
-                r = F"{r}{spaces}{key}:{dyn_spaces}{value}\n"
+                r = F'{r}{spaces}<div class="hover-line">{key_hover}:{dyn_spaces}{value}</div>\n'
             elif isinstance(value, (int, float)):
                 # Wert als HTML-Link
-                r = F"{r}{spaces}{key}:{dyn_spaces}{get_value_as_link(get_json_path(json_path, key), value, link_params)}\n"
+                r = F'{r}{spaces}<div class="hover-line">{key_hover}:{dyn_spaces}{get_value_as_link(get_json_path(json_path, key), value, link_params, "")}</div>\n'
 
     return r
+
 
 # ***********************************************************************************
 def json_to_ascii_vertical(data, r, th, space_len, json_path, json_key, link_params):
@@ -121,20 +133,31 @@ def json_to_ascii_vertical(data, r, th, space_len, json_path, json_key, link_par
     
     if isinstance (data, (int, float)):
         # data ist nur noch ein numerischer Wert aus der aufrufenden Procedure, also einfach ausgeben
-        r = f"{r}{spaces}{get_value_as_link(json_path, data, link_params)}"
+        r = f"{r}{spaces}{get_value_as_link(json_path, data, link_params, '')}"
     elif isinstance (data, (str)):
         # ...dito String-Wert
         r = f"{r}{spaces}{data}"
 
     elif isinstance (data, dict):
         # wenn data ein dict ist, dann "vertikal" in der Reihenfolge von tab_mask_defs auslesen/ausgeben
+        value_name = ""
+        r=f'{r}<div class="hover-line">'
         for c in tab_mask_def.items():
             if c[1]['view']:
                 value = get_nested_value(data, c[0])
                 if isinstance(value, str) or (value is None) or (c[1]['as_link'] == False):
                     # Wert nicht als HTML-Link ausgeben
-                    r = f"{r}{str(value).rjust(c[1]['len'])} "
-                    # Wert als Link ausgeben 
+                    # ...evtl. mit hover
+                    if c[0] == 'name':
+                        value_hover = model.get_hover(value)
+                        left_spaces = " "*(c[1]['len'] - len(str(value)))
+                        r = f"{r}{left_spaces}{value_hover} "
+                        # ...und Namen des Attributs merken um es evtl. spaeter im Graph anzeigen zu koennen
+                        value_name = value
+                    else:
+                        r = f"{r}{str(value).rjust(c[1]['len'])} "
                 elif isinstance(value, (int, float)):      
-                    r = f"{r}{get_value_as_link(get_json_path(json_path, c[0]), str(value).rjust(c[1]['len']), link_params)} "
+                    # Wert als Link ausgeben 
+                    r = f"{r}{get_value_as_link(get_json_path(json_path, c[0]), str(value).rjust(c[1]['len']), link_params, value_name)} "
+        r=f'{r}</div>'
     return r

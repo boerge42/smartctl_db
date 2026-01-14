@@ -50,6 +50,10 @@ class Index:
 	# ****************************
     def GET(self):
         devices = model.get_all_devices()
+        # einen Spaltenwert konvertieren
+        for i in range(0, len(devices)):
+            if devices[i]['smartctl_exit_status'] is not None:
+                devices[i]['smartctl_exit_status'] = f"0b{format(int(devices[i]['smartctl_exit_status']), '08b')}"
         return render.index(devices)
 
 # ***************************************************************
@@ -83,9 +87,9 @@ class Graph:
 
 	# ****************************
     def GET(self):
-        i = web.input(computer=None, device_name=None, generation=None, table=None, table_column=None, json_path=None)
+        i = web.input(computer=None, device_name=None, generation=None, table=None, table_column=None, json_path=None, description=None)
         graph_data = model.get_time_serie(i.computer, i.device_name, i.generation, i.table, i.table_column, i.json_path)
-        graph_div = graphs.generate_line_graph(graph_data, i.computer, i.device_name, i.generation, i.json_path)
+        graph_div = graphs.generate_line_graph(graph_data, i.computer, i.device_name, i.generation, i.json_path, i.description)
         return render.graph(graph_div)
 
 # ***************************************************************

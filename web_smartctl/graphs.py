@@ -15,7 +15,7 @@ from plotly.offline import plot
 import plotly.graph_objs as go
 
 # ***********************************************************************
-def generate_line_graph(data, computer, device_name, generation, value_name):
+def generate_line_graph(data, computer, device_name, generation, value_name, description):
 
     # Daten transformieren (datetimes/values)
     datetimes = []
@@ -38,6 +38,8 @@ def generate_line_graph(data, computer, device_name, generation, value_name):
         hovertemplate='timestamp: %{x}<br>value: %{y:.0f}'
     )
 
+    if description is not None:
+        value_name = f"{value_name} ({description})"
     layout = go.Layout(
         title=f"{computer} -> {device_name} ({generation})<br><b>{value_name}</b>",
         title_x = 0.5,

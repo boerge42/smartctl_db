@@ -7,18 +7,46 @@ $if len(devices) > 0:
             <th>device name</th>
             <th>generation</th>
             <th>created at</th>
+            <th>last seen</th>
+            <th>smartctl exitcode</th>
+            <th>temperature</th>
+            <th>power_cycle_count</th>
+            <th>power_on_time</th>
             <th></th>
         </tr>
     $for device in devices:
         <tr>
             <td>$device.computer</td>
             <td>$device.device_name</td>
-            <td>$device.generation</td>
-            <td>$device.created_at</td>
+            <td align="center">$device.generation</td>
+            <td>$device.device_created_at</td>
+            <td>$device.last_device_data</td>
+            <td align="center">$device.smartctl_exit_status</td>
+            <td align="center">$device.temperature</td>
+            <td align="center">$device.power_cycle_count</td>
+            <td align="center">$device.power_on_time</td>
             <td><a href="/details/?computer=$device.computer&device_name=$device.device_name&generation=$device.generation">detail</a></td>
         </tr>  
     </table>  
 
+    <p style="font-size: small;">
+    smartctl_exit_status:
+    <ul style="font-size: small;">
+    <li>Bit 0: Command line did not parse.</li>
+    <li>Bit 1: Device open failed, device did not return an IDENTIFY DEVICE structure, or 
+        device is in a low-power mode (see '-n' option above).</li>
+    <li>Bit 2: Some SMART or other ATA command to the disk failed, or there was a checksum
+        error in a SMART data structure (see '-b' option above).</li>
+    <li>Bit 3: SMART status check returned "DISK FAILING".</li>
+    <li>Bit 4: We found prefail Attributes <= threshold.</li>
+    <li>Bit 5: SMART status check returned "DISK OK" but we found that some (usage or prefail)
+        Attributes have been <= threshold at some time in the past.</li>
+    <li>Bit 6: The device error log contains records of errors.</li>
+    <li>Bit 7: The device self-test log contains records of errors.
+        [ATA only] Failed self-tests outdated by a newer successful extended self-test
+        are ignored.</li>
+    </ul>
+    </p>
 $else:
     <p>
     ...no devices found!

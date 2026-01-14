@@ -165,6 +165,20 @@ a:active {
   text-decoration: none;
 }
 
+.hover-line {
+  display: inline-block;           /* sorgt für sauberes Padding */
+  border-radius: 6px;              /* sanfte Ecken */
+  transition: background-color 160ms ease, 
+              font-weight 160ms ease, 
+              box-shadow 160ms ease;
+}
+
+.hover-line:hover {
+  background-color: #ffe9a8;       /* Hintergrundfarbe beim Hover */
+  cursor: pointer;                 /* Mauszeiger als Hinweis */
+}
+
+
 </style>
 
 <script>
