@@ -52,6 +52,11 @@ Linien-Diagramm zu einer, unter Details, ausgewählten Messreihe einer Festplatt
 
 Für die Generierung der Diagramme wurde die [Offline-Version](https://www.tutorialspoint.com/plotly/plotly_online_and_offline_plotting.htm) der Python-Bibliothek [plotly](https://plotly.com/python/) verwendet --> coole und einfache Technik, um "mal schnell" ein Diagramm zu einer Zahlenreihe für eine Webseite zu generieren...!
 
+## web_smartctl/smart_attribute_edit.py
+Eine kleine PyQt5-Anwendung, mit der man die sqliteDB smart_attribute.db erzeugen und pflegen kann. In dieser DB sind die Hover-Texte zu den entsprechenden S.M.A.R.T. - Atrributen abgelegt. Die Hover-Texte werden auf der Detailseite eingeblendet, wenn man mit dem Mauszeiger auf die Namen der Attributes geht.
+Das Python-Script wurde via ["vibe coding"](https://de.wikipedia.org/wiki/Vibe_Coding) generiert.
+
+![Graph](images/attribute_text_editor.png)
 
 ## ToDo
 
@@ -60,7 +65,7 @@ Es fehlt noch:
     - ...und ggf. auf Webseite geeignet darstellen
     - ...und vielleicht eine Mail o.ä. senden
   - zeitliche Eingrenzung Diagramm?
-  - ein paar Hilfeseiten (Links, Hover, was auch immer) zu den Bedeutungen der Metriken
+  
 
 
 ---
